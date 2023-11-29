@@ -64,7 +64,7 @@ public class DAO {
         Connection conn = null;
         String msj = "";
 
-        conn = c.getConnection();
+        conn = Conexion.getConnection();
         try {
             String sql = "INSERT INTO usuarios (id, nombre, password) values (?,?,?)";
             stm = (PreparedStatement) conn.prepareStatement(sql);

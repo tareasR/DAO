@@ -20,27 +20,41 @@ public class App
         
         System.out.println( "Hello World!" );
 
-        port(80);
+        //port(80);
+        port(getHerokuAssignedPort());
 
         get("/usuarios", (request, response)->{
             response.type("application/json");
-            // return gson.toJson(usuarios.values());
-            return gson.toJson(DAO.dameUsuarios());
+            return gson.toJson(usuarios.values());
+            // return gson.toJson(DAO.dameUsuarios());
         });
 
         post("/usuarios", (request, response)->{
+            response.type("application/json");
             String payload = request.body();
             Usuario usuario = gson.fromJson(payload, Usuario.class);
             System.out.println("payload "+payload);
             String id = UUID.randomUUID().toString();
             usuario.setId(id);
-            //usuarios.put(id, usuario);
-            DAO.crearUsuario(usuario);
+            usuarios.put(id, usuario);
+            // DAO.crearUsuario(usuario);
             System.out.println("n "+usuario.getNombre());
             System.out.println("p "+usuario.getPassword());
             System.out.println("i "+usuario.getId());
-            return usuario;
+
+            JsonObject respuesta = new JsonObject();
+            respuesta.addProperty("msj", "Se creo el usuario");
+            respuesta.addProperty("id", id);
+            return gson.toJson(usuario);
         });
 
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 }

@@ -24,8 +24,8 @@ public class App
 
         get("/usuarios", (request, response)->{
             response.type("application/json");
-            // return gson.toJson(usuarios.values());
-            return gson.toJson(DAO.dameUsuarios());
+            return gson.toJson(usuarios.values());
+            //return gson.toJson(DAO.dameUsuarios());
         });
 
         post("/usuarios", (request, response)->{
@@ -34,8 +34,8 @@ public class App
             System.out.println("payload "+payload);
             String id = UUID.randomUUID().toString();
             usuario.setId(id);
-            //usuarios.put(id, usuario);
-            DAO.crearUsuario(usuario);
+            usuarios.put(id, usuario);
+            //DAO.crearUsuario(usuario);
             System.out.println("n "+usuario.getNombre());
             System.out.println("p "+usuario.getPassword());
             System.out.println("i "+usuario.getId());
